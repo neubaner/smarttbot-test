@@ -19,7 +19,7 @@ export interface Ticker {
   percentChange: string
   baseVolume: string
   quoteVolume: string
-  isFrozen: number
+  isFrozen: string
   high24hr: string
   low24hr: string
 }
@@ -33,7 +33,7 @@ export async function fetchCurrencyInfo(): Promise<CurrencyInfoResponse> {
   return responseData as CurrencyInfoResponse
 }
 
-export async function fetchTicker(): Promise<Ticker[]> {
+export async function fetchTickers(): Promise<Ticker[]> {
   const response = await fetch(`${baseApiUrl}/public?command=returnTicker`)
   const responseData = await response.json()
 

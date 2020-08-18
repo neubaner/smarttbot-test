@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { Provider as ReduxProvider } from 'react-redux'
+import buildStore from './redux/store'
+import Router from './Router'
+
+const store = buildStore()
 
 function App() {
-  return <div className="App">Crypto Viewer</div>
+  return (
+    <ReduxProvider store={store}>
+      <Router />
+    </ReduxProvider>
+  )
 }
 
 export default App

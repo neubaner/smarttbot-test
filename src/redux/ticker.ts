@@ -24,7 +24,7 @@ type TickerActions =
   | ReceiveTickersAction
   | ErrorTickersAction
 
-interface TickerState {
+export interface TickerState {
   isFetching: boolean
   items: Ticker[]
   error: string | null

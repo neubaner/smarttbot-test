@@ -1,8 +1,12 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import ticker from './ticker'
+import ticker, { TickerState } from './ticker'
 
-const rootReducer = combineReducers({
+export interface StoreShape {
+  ticker: TickerState
+}
+
+const rootReducer = combineReducers<StoreShape>({
   ticker,
 })
 

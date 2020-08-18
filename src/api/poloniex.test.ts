@@ -1,10 +1,10 @@
-import { fetchTicker, fetchCurrencyInfo, Ticker } from './poloniex'
+import { fetchTickers, fetchCurrencyInfo, Ticker } from './poloniex'
 
 describe('fetchTicker', () => {
   let ticker: Ticker[]
 
   beforeAll(async () => {
-    ticker = await fetchTicker()
+    ticker = await fetchTickers()
   })
 
   it('should return valid ticker data', async () => {

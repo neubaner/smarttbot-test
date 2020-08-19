@@ -42,6 +42,16 @@ export interface ChartData {
   weightedAverage: number
 }
 
+export interface TradeHistory {
+  globalTradeId: number
+  tradeId: number
+  date: Date
+  type: string
+  rate: string
+  amount: string
+  total: string
+}
+
 const baseApiUrl = process.env.REACT_APP_POLONIEX_BASE_URL
 
 export async function fetchCurrencyInfo() {
@@ -63,7 +73,9 @@ export async function fetchTickers(): Promise<Ticker[]> {
 
 export async function fetchOrderBook(pair: [string, string]) {
   const response = await fetch(
-    `${baseApiUrl}/public?command=returnOrder&currencyPair=${pair.join('_')}`
+    `${baseApiUrl}/public?command=returnOrderBook&currencyPair=${pair.join(
+      '_'
+    )}`
   )
 
   const responseData = await response.json()
@@ -88,4 +100,21 @@ export async function fetchChartData(
   const responseData = await response.json()
 
   return responseData as ChartData[]
+}
+
+export async function fetchTradeHistory(
+  pair: [string, string]
+): Promise<TradeHistory[]> {
+  const response = await fetch(
+    `${baseApiUrl}/public?command=returnTradeHistory&currencyPair=${pair.join(
+      '_'
+    )}`
+  )
+
+  const responseData = await response.json()
+
+  return responseData.map((data: TradeHistory) => ({
+    ...data,
+    date: new Date(data.date),
+  }))
 }

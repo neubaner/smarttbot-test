@@ -24,9 +24,27 @@ export interface Ticker {
   low24hr: string
 }
 
+export interface OrderBook {
+  asks: string[][]
+  bids: string[][]
+  isFrozen: string
+  seq: number
+}
+
+export interface ChartData {
+  date: number
+  high: number
+  low: number
+  open: number
+  close: number
+  volume: number
+  quoteVolume: number
+  weightedAverage: number
+}
+
 const baseApiUrl = process.env.REACT_APP_POLONIEX_BASE_URL
 
-export async function fetchCurrencyInfo(): Promise<CurrencyInfoResponse> {
+export async function fetchCurrencyInfo() {
   const response = await fetch(`${baseApiUrl}/public?command=returnCurrencies`)
   const responseData = await response.json()
 
@@ -41,4 +59,33 @@ export async function fetchTickers(): Promise<Ticker[]> {
     currencyPair: ticker.split('_'),
     ...responseData[ticker],
   }))
+}
+
+export async function fetchOrderBook(pair: [string, string]) {
+  const response = await fetch(
+    `${baseApiUrl}/public?command=returnOrder&currencyPair=${pair.join('_')}`
+  )
+
+  const responseData = await response.json()
+
+  return responseData as OrderBook
+}
+
+export async function fetchChartData(
+  pair: [string, string],
+  period: number,
+  start: Date,
+  end: Date
+) {
+  const response = await fetch(
+    `${baseApiUrl}/public?command=returnChartData` +
+      `&currencyPair=${pair.join('_')}` +
+      `&period=${period}` +
+      `&start=${Math.floor(start.getTime() / 1000)}` +
+      `&end=${Math.floor(end.getTime() / 1000)}`
+  )
+
+  const responseData = await response.json()
+
+  return responseData as ChartData[]
 }

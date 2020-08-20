@@ -11,6 +11,6 @@ const columns: Column<string[]>[] = [
   { title: 'High', field: 1, type: 'numeric' },
 ]
 
-export function OrderBookTable({ title, data }: OrderBookTableProps) {
+export default function OrderBookTable({ title, data }: OrderBookTableProps) {
   return <MaterialTable title={title} columns={columns} data={data} />
 }

@@ -40,7 +40,7 @@ type CurrencyInfoAction =
 // fazer somente uma busca na store.
 // Caso em algum requisito, ou em uma aplicação maior, talvez a melhor opção
 // seja desacoplar estes dados
-interface CurrencyPairItem {
+export interface CurrencyPairItem {
   orderBook?: OrderBook
   chartData?: ChartData[]
   tradeHistory?: TradeHistory[]
@@ -54,10 +54,10 @@ export interface CurrencyPairState {
 
 const initialState: CurrencyPairState = {}
 
-export default function reducer(
-  state = initialState,
+function deriveDataFromAction(
+  state: CurrencyPairState,
   action: CurrencyInfoAction
-): CurrencyPairState {
+) {
   const pair = action.pair.join('_')
 
   const currencyInfo = state[pair] ?? {
@@ -65,15 +65,27 @@ export default function reducer(
     error: null,
   }
 
+  return { pair, currencyInfo }
+}
+
+export default function reducer(
+  state = initialState,
+  action: CurrencyInfoAction
+): CurrencyPairState {
   switch (action.type) {
-    case REQUEST_CURRENCY_INFO:
+    case REQUEST_CURRENCY_INFO: {
+      const { pair, currencyInfo } = deriveDataFromAction(state, action)
+
       return {
         [pair]: {
           ...currencyInfo,
           isFetching: true,
         },
       }
-    case RECEIVE_CURRENCY_INFO:
+    }
+    case RECEIVE_CURRENCY_INFO: {
+      const { pair, currencyInfo } = deriveDataFromAction(state, action)
+
       return {
         [pair]: {
           ...currencyInfo,
@@ -83,7 +95,9 @@ export default function reducer(
           isFetching: false,
         },
       }
-    case ERROR_CURRENCY_INFO:
+    }
+    case ERROR_CURRENCY_INFO: {
+      const { pair, currencyInfo } = deriveDataFromAction(state, action)
       return {
         [pair]: {
           ...currencyInfo,
@@ -91,6 +105,7 @@ export default function reducer(
           isFetching: false,
         },
       }
+    }
     default:
       return state
   }

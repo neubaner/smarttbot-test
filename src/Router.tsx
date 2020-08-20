@@ -7,7 +7,7 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/currency">
+        <Route path="/currency/:pair">
           <CurrencyPage />
         </Route>
         <Route path="/">
